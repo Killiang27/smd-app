@@ -30,14 +30,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         prog="ledger", description="Balances and spending of your accounts."
     )
-    parser.add_argument("command", choices=["balance", "spending"])
+    parser.add_argument("command", choices=["balance", "spending", "months"])
     parser.add_argument("file", nargs="?", type=Path, default=DEFAULT_FILE)
     args = parser.parse_args()
 
     transactions = storage.read_csv(args.file)
     if args.command == "balance":
         print_totals(reports.balances(transactions))
-    else:
+    elif args.command == "spending":
         print_spending(reports.spending_by_category(transactions))
-    # TODO 4: add a command "months" that prints reports.net_by_month with
-    #         print_totals. Two changes: the choices above, and a branch here.
+    else:
+        print_totals(reports.net_by_month(transactions))
